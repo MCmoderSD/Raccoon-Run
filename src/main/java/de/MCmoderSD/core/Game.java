@@ -8,6 +8,7 @@ import de.MCmoderSD.objects.Obstacle;
 import de.MCmoderSD.objects.Raccoon;
 
 import java.awt.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,9 +24,9 @@ public class Game implements Runnable {
     // Attributes
     private final ArrayList<Double> events;
     private final ArrayList<Double> keys;
+    private final ArrayList<Background> backgrounds;
     private final ArrayList<Obstacle> obstacles;
     private final Raccoon raccoon;
-    private final Background background;
 
     // Constants
     private final double tickrate;
@@ -68,9 +69,14 @@ public class Game implements Runnable {
         // Init Attributes
         events = new ArrayList<>();
         keys = new ArrayList<>();
+        backgrounds = new ArrayList<>();
         obstacles = new ArrayList<>();
         raccoon = new Raccoon(config, Math.toIntExact(Math.round(config.getWidth() * 0.25)), Math.toIntExact(Math.round(config.getHeight() * 0.5)));
-        background = new Background(config, 0, 0);
+
+        // Init Backgrounds
+        backgrounds.add(new Background(config, 0, 0));
+        while (backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth() < config.getWidth())
+            backgrounds.add(new Background(config, backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth(), 0));
     }
 
 
@@ -152,10 +158,32 @@ public class Game implements Runnable {
 
         if (isPaused) {
             // Game Tick Event
+
+
+            // Remove Objects
+
+
+            // Move Objects
+            for (Background background : backgrounds) background.move();
+            for (Obstacle obstacle : obstacles) obstacle.move();
+            raccoon.fall();
         }
 
 
         return event;
+    }
+
+    // Triggers
+    public void jump() {
+        if (!gameStarted) gameStarted = true;
+
+        raccoon.jump();
+
+        System.out.println("Jump");
+    }
+
+    public void togglePause() {
+        isPaused = !isPaused;
     }
 
     // Getters
@@ -171,8 +199,8 @@ public class Game implements Runnable {
         return raccoon;
     }
 
-    public Background getBackground() {
-        return background;
+    public ArrayList<Background> getBackgrounds() {
+        return backgrounds;
     }
 
     public ArrayList<Obstacle> getObstacles() {

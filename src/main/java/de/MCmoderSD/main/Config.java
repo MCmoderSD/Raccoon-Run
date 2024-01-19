@@ -44,6 +44,7 @@ public class Config {
 
     // Language
     private final String title;
+    private final String scorePrefix;
 
     // Animations
     //private final ImageIcon rainbowAnimation;
@@ -97,6 +98,7 @@ public class Config {
 
         // Language
         title = config.get("title").asText();
+        scorePrefix = config.get("scorePrefix").asText();
     }
 
     // Constants
@@ -202,5 +204,8 @@ public class Config {
     // Language
     public String getTitle() {
         return title;
+    }
+    public String getScorePrefix() {
+        return scorePrefix;
     }
 }

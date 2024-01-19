@@ -33,19 +33,6 @@ public class Background {
         this.y = y;
     }
 
-    public Background(Config config, Point location) {
-        image = config.getBackgroundImage();
-        color = config.getBackgroundColor();
-
-        speed = config.getBackgroundSpeed();
-
-        width = image.getWidth();
-        height = image.getHeight();
-
-        x = location.x;
-        y = location.y;
-    }
-
     // Methods
     public void move() {
         x -= speed;

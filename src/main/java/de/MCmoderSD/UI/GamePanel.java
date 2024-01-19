@@ -13,9 +13,7 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel {
 
     // Associations
-    private final Frame frame;
     private final Config config;
-    private final InputHandler inputHandler;
     private final Game game;
 
     // Attributes
@@ -23,11 +21,11 @@ public class GamePanel extends JPanel {
 
     // Constructor
     public GamePanel(Frame frame, Config config) {
-        this.frame = frame;
+        super();
+
         this.config = config;
 
         // Init Panel
-
         setLayout(null);
         setPreferredSize(config.getSize());
         setFocusable(true);
@@ -36,8 +34,8 @@ public class GamePanel extends JPanel {
         frame.pack();
 
         // Score Label
-        scoreLabel = new JLabel("Score: ");
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        scoreLabel = new JLabel(config.getScorePrefix());
+        scoreLabel.setFont(new Font("Roboto", Font.PLAIN, config.getHeight() / 40));
         scoreLabel.setForeground(config.getScoreColor());
         scoreLabel.setSize(getWidth() / 8, getHeight() / 40);
         scoreLabel.setLocation(getWidth() - scoreLabel.getWidth() - 10, 10);
@@ -45,7 +43,7 @@ public class GamePanel extends JPanel {
 
         // Init Game and Controls
         game = new Game(this, config);
-        inputHandler = new InputHandler(frame, game);
+        new InputHandler(frame, game);
     }
 
     @Override
@@ -55,17 +53,16 @@ public class GamePanel extends JPanel {
         Graphics2D g = (Graphics2D) graphics;
 
         // Objects
-        Background background = game.getBackground();
-        Raccoon raccoon = game.getRaccoon();
+        ArrayList<Background> backgrounds = game.getBackgrounds();
         ArrayList<Obstacle> obstacles = game.getObstacles();
+        Raccoon raccoon = game.getRaccoon();
 
-
-        // Render
-
-        // Draw Game
-        g.setColor(background.getColor());
-        g.fillRect(background.getX(), background.getY(), background.getWidth(), background.getHeight());
-        g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(), background.getHeight(), null);
+        // Draw Background
+        for (Background background : backgrounds) {
+            g.setColor(background.getColor());
+            g.fillRect(background.getX(), background.getY(), background.getWidth(), background.getHeight());
+            g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(), background.getHeight(), null);
+        }
 
         // Draw Obstacles
         for (Obstacle obstacle : obstacles) {
@@ -90,7 +87,7 @@ public class GamePanel extends JPanel {
             g.drawRect(raccoon.getX(), raccoon.getY(), raccoon.getWidth(), raccoon.getHeight());
         }
 
-        scoreLabel.setText("Score: " + game.getScore());
+        scoreLabel.setText(config.getScorePrefix() + game.getScore());
         paintComponents(g);
     }
 }
