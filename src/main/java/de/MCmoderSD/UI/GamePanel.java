@@ -28,8 +28,6 @@ public class GamePanel extends JPanel {
         // Init Panel
         setLayout(null);
         setPreferredSize(config.getSize());
-        setFocusable(true);
-        requestFocus();
         frame.add(this);
         frame.pack();
 

@@ -26,8 +26,6 @@ public class InputHandler implements KeyListener {
         if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_Q) System.exit(0);
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) game.togglePause();
         if (e.getKeyCode() == KeyEvent.VK_SPACE) game.jump();
-
-        System.out.println("pressed");
     }
 
     @Override

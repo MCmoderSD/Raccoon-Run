@@ -39,7 +39,6 @@ public class Game implements Runnable {
     private double speedModifier;
     private boolean gameStarted;
     private boolean isPaused;
-    private boolean isJump;
     private boolean sound;
     private boolean debug;
 
@@ -58,13 +57,13 @@ public class Game implements Runnable {
 
         // Init Game Variables
         isLinux = System.getProperty("os.name").equals("Linux");
-        isJump = false;
         gameStarted = false;
         isPaused = false;
         sound = true;
         debug = false;
         speedModifier = 1;
         score = 0;
+        frameRate = 1;
 
         // Init Attributes
         events = new ArrayList<>();
@@ -77,6 +76,8 @@ public class Game implements Runnable {
         backgrounds.add(new Background(config, 0, 0));
         while (backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth() < config.getWidth())
             backgrounds.add(new Background(config, backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth(), 0));
+
+        new Thread(this).start();
     }
 
 
@@ -90,9 +91,6 @@ public class Game implements Runnable {
             long timer = 0;
             long now = System.nanoTime();
             int renderedFrames = 0;
-
-            // Wait for start
-            if (isJump && gamePanel.isVisible()) gameStarted = true;
 
             // Game Loop
             while (gameStarted) {
@@ -156,9 +154,9 @@ public class Game implements Runnable {
         // Generate Event
         double event = random.nextDouble() * System.nanoTime();
 
-        if (isPaused) {
+        if (!isPaused) {
             // Game Tick Event
-
+            System.out.println("Tick");
 
             // Remove Objects
 
@@ -166,7 +164,7 @@ public class Game implements Runnable {
             // Move Objects
             for (Background background : backgrounds) background.move();
             for (Obstacle obstacle : obstacles) obstacle.move();
-            raccoon.fall();
+            if (raccoon.getY() <= config.getHeight() * 0.51) raccoon.fall();
         }
 
 
@@ -176,10 +174,7 @@ public class Game implements Runnable {
     // Triggers
     public void jump() {
         if (!gameStarted) gameStarted = true;
-
-        raccoon.jump();
-
-        System.out.println("Jump");
+        if (raccoon.getY() >= config.getHeight() * 0.49) raccoon.jump();
     }
 
     public void togglePause() {
