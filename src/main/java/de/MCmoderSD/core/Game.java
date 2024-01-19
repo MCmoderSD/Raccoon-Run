@@ -156,15 +156,31 @@ public class Game implements Runnable {
 
         if (!isPaused) {
             // Game Tick Event
-            System.out.println("Tick");
 
-            // Remove Objects
+            // Temp lists for removal
+            ArrayList<Background> backgroundsToRemove = new ArrayList<>();
+            ArrayList<Obstacle> obstaclesToRemove = new ArrayList<>();
 
+            // Remove elements that are out of bounds
+            for (Background background : backgrounds)
+                if (background.getX() + background.getWidth() < 0) backgroundsToRemove.add(background);
+            for (Obstacle obstacle : obstacles)
+                if (obstacle.getX() + obstacle.getWidth() < 0) obstaclesToRemove.add(obstacle);
+
+            // Remove elements from original lists
+            backgrounds.removeAll(backgroundsToRemove);
+            obstacles.removeAll(obstaclesToRemove);
+
+            // Background Spawn
+            Background lastBackground = backgrounds.get(backgrounds.size() - 1);
+            if (lastBackground.getX() + lastBackground.getWidth() <= config.getWidth())
+                backgrounds.add(new Background(config, config.getWidth(), 0));
 
             // Move Objects
             for (Background background : backgrounds) background.move();
             for (Obstacle obstacle : obstacles) obstacle.move();
-            if (raccoon.getY() <= config.getHeight() * 0.51) raccoon.fall();
+            if (raccoon.getY() <= config.getHeight() * 0.5) raccoon.fall();
+            raccoon.move(config.getHeight() * 0.5);
         }
 
 
@@ -174,7 +190,7 @@ public class Game implements Runnable {
     // Triggers
     public void jump() {
         if (!gameStarted) gameStarted = true;
-        if (raccoon.getY() >= config.getHeight() * 0.49) raccoon.jump();
+        if (raccoon.getY() >= config.getHeight() * 0.5) raccoon.jump();
     }
 
     public void togglePause() {

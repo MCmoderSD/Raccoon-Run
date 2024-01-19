@@ -45,6 +45,10 @@ public class Raccoon {
 
     public void fall() {
         speed += gravity;
+    }
+
+    public void move(double ground) {
+        if (speed > 0 && y >= ground) speed = 0;
         y += speed;
     }
 

@@ -2,7 +2,7 @@
   "width": 1200,
   "height": 800,
   "resizable": false,
-  "jumpHeight": 1.5,
+  "jumpHeight": 2,
   "gravity": 0.00981,
   "backgroundSpeed": 0.15,
   "obstacleSpeed": 0.25,
