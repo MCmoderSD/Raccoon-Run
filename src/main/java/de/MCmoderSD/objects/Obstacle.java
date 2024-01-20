@@ -3,7 +3,8 @@ package de.MCmoderSD.objects;
 
 import de.MCmoderSD.main.Config;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Obstacle {
@@ -15,10 +16,11 @@ public class Obstacle {
     private final int width;
     private final int height;
     private final float speed;
-
     // Variables
     private float x;
     private float y;
+    private boolean collided;
+    private boolean passed;
 
 
     // Constructors
@@ -30,6 +32,8 @@ public class Obstacle {
 
         color = config.getObstacleColor();
         hitboxColor = config.getObstacleHitboxColor();
+
+        collided = false;
 
         width = image.getWidth();
         height = image.getHeight();
@@ -46,6 +50,14 @@ public class Obstacle {
     public void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void collision() {
+        collided = true;
+    }
+
+    public void pass() {
+        passed = true;
     }
 
     // Getter
@@ -69,6 +81,14 @@ public class Obstacle {
         return Math.toIntExact(Math.round(y));
     }
 
+    public boolean isCollided() {
+        return collided;
+    }
+
+    public boolean isPassed() {
+        return passed;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -80,5 +100,4 @@ public class Obstacle {
     public Rectangle getHitbox() {
         return new Rectangle(getX(), getY(), width, height);
     }
-
 }

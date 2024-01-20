@@ -22,5 +22,6 @@
   "scoreColor": "#ffff00",
   "fpsColor": "#00ff00",
   "title": "Raccoon Run",
-  "scorePrefix": "Score: "
+  "scorePrefix": "Score: ",
+  "fpsPrefix": "FPS: "
 }

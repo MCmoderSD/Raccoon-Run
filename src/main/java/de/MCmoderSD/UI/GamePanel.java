@@ -6,8 +6,11 @@ import de.MCmoderSD.objects.Background;
 import de.MCmoderSD.objects.Obstacle;
 import de.MCmoderSD.objects.Raccoon;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
@@ -18,6 +21,7 @@ public class GamePanel extends JPanel {
 
     // Attributes
     private final JLabel scoreLabel;
+    private final JLabel fpsLabel;
 
     // Constructor
     public GamePanel(Frame frame, Config config) {
@@ -38,6 +42,14 @@ public class GamePanel extends JPanel {
         scoreLabel.setSize(getWidth() / 8, getHeight() / 40);
         scoreLabel.setLocation(getWidth() - scoreLabel.getWidth() - 10, 10);
         add(scoreLabel);
+
+        // FPS Label
+        fpsLabel = new JLabel(config.getFpsPrefix());
+        fpsLabel.setFont(new Font("Roboto", Font.PLAIN, config.getHeight() / 40));
+        fpsLabel.setForeground(config.getFpsColor());
+        fpsLabel.setSize(getWidth() / 8, getHeight() / 40);
+        fpsLabel.setLocation(10, 10);
+        add(fpsLabel);
 
         // Init Game and Controls
         game = new Game(this, config);
@@ -62,7 +74,7 @@ public class GamePanel extends JPanel {
             g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(), background.getHeight(), null);
         }
 
-        // Draw Obstacles ToDo Fix error
+        // Draw Obstacles
         for (Obstacle obstacle : obstacles) {
             g.setColor(obstacle.getColor());
             //g.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
@@ -75,7 +87,7 @@ public class GamePanel extends JPanel {
         g.drawImage(raccoon.getImage(), raccoon.getX(), raccoon.getY(), raccoon.getWidth(), raccoon.getHeight(), null);
 
         // Draw Hitbox
-        if (game.isDebug()) {
+        if (game.isHitbox()) {
             for (Obstacle obstacle : obstacles) {
                 g.setColor(obstacle.getHitboxColor());
                 g.drawRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
@@ -86,6 +98,12 @@ public class GamePanel extends JPanel {
         }
 
         scoreLabel.setText(config.getScorePrefix() + game.getScore());
+
+        if (game.isShowFPS()) {
+            fpsLabel.setText(config.getFpsPrefix() + game.getFps());
+            fpsLabel.setVisible(true);
+        } else fpsLabel.setVisible(false);
+
         paintComponents(g);
     }
 }

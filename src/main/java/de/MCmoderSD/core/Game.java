@@ -7,8 +7,7 @@ import de.MCmoderSD.objects.Background;
 import de.MCmoderSD.objects.Obstacle;
 import de.MCmoderSD.objects.Raccoon;
 
-import java.awt.*;
-import java.util.ArrayDeque;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -42,6 +41,8 @@ public class Game implements Runnable {
     private boolean isPaused;
     private boolean sound;
     private boolean debug;
+    private boolean hitbox;
+    private boolean showFPS;
 
 
     // Constructor
@@ -62,6 +63,9 @@ public class Game implements Runnable {
         isPaused = false;
         sound = true;
         debug = false;
+        hitbox = false;
+        showFPS = false;
+        obstacleSpawnTimer = 0;
         speedModifier = 1;
         score = 0;
         frameRate = 1;
@@ -186,13 +190,24 @@ public class Game implements Runnable {
                 obstacleSpawnTimer = 0;
             } else obstacleSpawnTimer++;
 
+            // Collision Detection
+            for (Obstacle obstacle : obstacles) if (raccoon.getHitbox().intersects(obstacle.getHitbox())) {
+                obstacle.collision();
+                gameStarted = false;
+            }
+
+            // Score
+            for (Obstacle obstacle : obstacles) if (obstacle.getX() + obstacle.getWidth() < raccoon.getX() && !obstacle.isCollided() && !obstacle.isPassed()) {
+                obstacle.pass();
+                score++;
+            }
+
             // Move Objects
             for (Background background : backgrounds) background.move();
             for (Obstacle obstacle : obstacles) obstacle.move();
             if (raccoon.getY() <= config.getHeight() * 0.5) raccoon.fall();
             raccoon.move(config.getHeight() * 0.5);
         }
-
 
         return event;
     }
@@ -205,6 +220,18 @@ public class Game implements Runnable {
 
     public void togglePause() {
         isPaused = !isPaused;
+    }
+
+    public void toggleDebug() {
+        debug = !debug;
+    }
+
+    public void toggleHitboxes() {
+        hitbox = !hitbox;
+    }
+
+    public void toggleFPS() {
+        showFPS = !showFPS;
     }
 
     // Getters
@@ -230,5 +257,13 @@ public class Game implements Runnable {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public boolean isHitbox() {
+        return hitbox;
+    }
+
+    public boolean isShowFPS() {
+        return showFPS;
     }
 }

@@ -46,6 +46,7 @@ public class Config {
     // Language
     private final String title;
     private final String scorePrefix;
+    private final String fpsPrefix;
 
     // Animations
     //private final ImageIcon rainbowAnimation;
@@ -102,6 +103,7 @@ public class Config {
         // Language
         title = config.get("title").asText();
         scorePrefix = config.get("scorePrefix").asText();
+        fpsPrefix = config.get("fpsPrefix").asText();
     }
 
     // Constants
@@ -213,5 +215,9 @@ public class Config {
     }
     public String getScorePrefix() {
         return scorePrefix;
+    }
+
+    public String getFpsPrefix() {
+        return fpsPrefix;
     }
 }

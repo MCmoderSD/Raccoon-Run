@@ -3,8 +3,8 @@ package de.MCmoderSD.UI;
 import de.MCmoderSD.main.Config;
 import de.MCmoderSD.utilities.Calculate;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
 
 public class Frame extends JFrame {
     public Frame(Config config) {

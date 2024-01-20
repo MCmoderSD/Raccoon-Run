@@ -2,7 +2,7 @@ package de.MCmoderSD.objects;
 
 import de.MCmoderSD.main.Config;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 @SuppressWarnings("unused")
