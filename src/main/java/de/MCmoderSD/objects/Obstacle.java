@@ -6,7 +6,7 @@ import de.MCmoderSD.main.Config;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Obstacle {
+public class Obstacle {
 
     // Attributes
     private final BufferedImage image;
@@ -15,30 +15,37 @@ public abstract class Obstacle {
     private final int width;
     private final int height;
     private final float speed;
-    private final float y;
 
     // Variables
     private float x;
+    private float y;
 
 
     // Constructors
-    public Obstacle(Config config, BufferedImage image, int x, int y, float speed) {
+    public Obstacle(Config config, float speed) {
 
-        this.image = image;
-        this.speed = speed;
-        this.x = x;
-        this.y = y;
+        BufferedImage[] obstacleImages = config.getObstacleImages();
+
+        image = obstacleImages[(int) Math.round(Math.random() * (obstacleImages.length - 1))];
 
         color = config.getObstacleColor();
         hitboxColor = config.getObstacleHitboxColor();
 
         width = image.getWidth();
         height = image.getHeight();
+
+        this.speed = speed;
     }
 
     // Methods
     public void move() {
         x -= speed;
+    }
+
+    // Setter
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     // Getter

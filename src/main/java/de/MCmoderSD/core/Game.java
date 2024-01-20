@@ -36,6 +36,7 @@ public class Game implements Runnable {
     private int frameRate;
     private int fps;
     private int score;
+    private int obstacleSpawnTimer;
     private double speedModifier;
     private boolean gameStarted;
     private boolean isPaused;
@@ -70,7 +71,8 @@ public class Game implements Runnable {
         keys = new ArrayList<>();
         backgrounds = new ArrayList<>();
         obstacles = new ArrayList<>();
-        raccoon = new Raccoon(config, Math.toIntExact(Math.round(config.getWidth() * 0.25)), Math.toIntExact(Math.round(config.getHeight() * 0.5)));
+        raccoon = new Raccoon(config);
+        raccoon.setLocation(Math.toIntExact(Math.round(config.getWidth() * 0.1)), Math.toIntExact(Math.round(config.getHeight() * 0.5)) - raccoon.getHeight());
 
         // Init Backgrounds
         backgrounds.add(new Background(config, 0, 0));
@@ -176,6 +178,14 @@ public class Game implements Runnable {
             if (lastBackground.getX() + lastBackground.getWidth() <= config.getWidth())
                 backgrounds.add(new Background(config, config.getWidth(), 0));
 
+            // Obstacle Spawn
+            if (obstacleSpawnTimer >= config.getObstacleSpawnRate()) {
+                Obstacle obstacle = new Obstacle(config, 2);
+                obstacle.setLocation(config.getWidth(), Math.toIntExact(Math.round(config.getHeight() * 0.5)) - obstacle.getHeight());
+                obstacles.add(obstacle);
+                obstacleSpawnTimer = 0;
+            } else obstacleSpawnTimer++;
+
             // Move Objects
             for (Background background : backgrounds) background.move();
             for (Obstacle obstacle : obstacles) obstacle.move();
@@ -190,7 +200,7 @@ public class Game implements Runnable {
     // Triggers
     public void jump() {
         if (!gameStarted) gameStarted = true;
-        if (raccoon.getY() >= config.getHeight() * 0.5) raccoon.jump();
+        if (raccoon.getY() >= config.getHeight() * 0.5 - raccoon.getHeight()) raccoon.jump();
     }
 
     public void togglePause() {

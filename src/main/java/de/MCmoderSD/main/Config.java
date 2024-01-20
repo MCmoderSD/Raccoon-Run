@@ -24,13 +24,14 @@ public class Config {
     private final float backgroundSpeed;
     private final float obstacleSpeed;
     private final float obstacleSpeedModifier;
-    private final float obstacleSpawnRate;
+    private final int obstacleSpawnRate;
     private final int maxFPS;
 
     // Assets
     private final BufferedImage icon;
     private final BufferedImage backgroundImage;
     private final BufferedImage raccoonImage;
+    private final BufferedImage[] obstacleImages;
 
     // Colors
     private final Color raccoonColor;
@@ -78,13 +79,15 @@ public class Config {
         backgroundSpeed = config.get("backgroundSpeed").asFloat();
         obstacleSpeed = config.get("obstacleSpeed").asFloat();
         obstacleSpeedModifier = config.get("obstacleSpeedModifier").asFloat();
-        obstacleSpawnRate = config.get("obstacleSpawnRate").asFloat();
+        obstacleSpawnRate = config.get("obstacleSpawnRate").asInt();
         maxFPS = config.get("maxFPS").asInt();
 
         // Assets
+        obstacleImages = new BufferedImage[1];
         icon = imageReader.read(config.get("icon").asText());
         backgroundImage = imageReader.read(config.get("backgroundImage").asText());
         raccoonImage = imageReader.read(config.get("raccoonImage").asText());
+        obstacleImages[0] = imageReader.read(config.get("garbageCanImage").asText());
 
         // Colors
         raccoonColor = config.get("raccoonColor").asColor();
@@ -144,7 +147,7 @@ public class Config {
         return obstacleSpeedModifier;
     }
 
-    public float getObstacleSpawnRate() {
+    public int getObstacleSpawnRate() {
         return obstacleSpawnRate;
     }
 
@@ -166,6 +169,9 @@ public class Config {
         return raccoonImage;
     }
 
+    public BufferedImage[] getObstacleImages() {
+        return obstacleImages;
+    }
 
     // Colors
     public Color getRaccoonColor() {

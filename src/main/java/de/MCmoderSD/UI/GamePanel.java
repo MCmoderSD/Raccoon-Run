@@ -62,10 +62,10 @@ public class GamePanel extends JPanel {
             g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(), background.getHeight(), null);
         }
 
-        // Draw Obstacles
+        // Draw Obstacles ToDo Fix error
         for (Obstacle obstacle : obstacles) {
             g.setColor(obstacle.getColor());
-            g.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+            //g.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
             g.drawImage(obstacle.getImage(), obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight(), null);
         }
 

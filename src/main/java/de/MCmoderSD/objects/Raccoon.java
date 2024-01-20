@@ -22,7 +22,7 @@ public class Raccoon {
     private float speed;
 
     // Constructors
-    public Raccoon(Config config, int x, int y) {
+    public Raccoon(Config config) {
         color = config.getRaccoonColor();
         hitboxColor = config.getRaccoonHitboxColor();
         image = config.getRaccoonImage();
@@ -31,9 +31,6 @@ public class Raccoon {
 
         jumpHeight = config.getJumpHeight();
         gravity = config.getGravity();
-
-        this.x = x;
-        this.y = y;
 
         speed = 0;
     }
@@ -48,8 +45,14 @@ public class Raccoon {
     }
 
     public void move(double ground) {
-        if (speed > 0 && y >= ground) speed = 0;
+        if (speed > 0 && y >= ground - height) speed = 0;
         y += speed;
+    }
+
+    // Setter
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     // Getter
