@@ -2,6 +2,7 @@ package de.MCmoderSD.main;
 
 
 import de.MCmoderSD.utilities.image.ImageReader;
+import de.MCmoderSD.utilities.image.ImageStreamer;
 import de.MCmoderSD.utilities.json.JsonNode;
 import de.MCmoderSD.utilities.json.JsonUtility;
 
@@ -52,12 +53,14 @@ public class Config {
     //private final ImageIcon rainbowAnimation;
 
     // Sounds
-    /*private final String dieSound;
+    /*
+    private final String dieSound;
     private final String jumpSound;
     private final String hitSound;
     private final String pointSound;
     private final String rainbowSound;
-    private final String backgroundMusic;*/
+    private final String backgroundMusic;
+    */
 
     // Constructor
     public Config(String[] args) {
@@ -89,6 +92,53 @@ public class Config {
         backgroundImage = imageReader.read(config.get("backgroundImage").asText());
         raccoonImage = imageReader.read(config.get("raccoonImage").asText());
         obstacleImages[0] = imageReader.read(config.get("garbageCanImage").asText());
+
+        // Colors
+        raccoonColor = config.get("raccoonColor").asColor();
+        raccoonHitboxColor = config.get("raccoonHitboxColor").asColor();
+        obstacleColor = config.get("obstacleColor").asColor();
+        obstacleHitboxColor = config.get("obstacleHitboxColor").asColor();
+        backgroundColor = config.get("backgroundColor").asColor();
+        fontColor = config.get("fontColor").asColor();
+        scoreColor = config.get("scoreColor").asColor();
+        fpsColor = config.get("fpsColor").asColor();
+
+        // Language
+        title = config.get("title").asText();
+        scorePrefix = config.get("scorePrefix").asText();
+        fpsPrefix = config.get("fpsPrefix").asText();
+    }
+
+    // Constructor asset streaming
+    public Config(String[] args, String url) {
+        this.args = args;
+
+        JsonUtility jsonUtility = new JsonUtility(url);
+        ImageStreamer imageStreamer = new ImageStreamer(url);
+
+        JsonNode config = jsonUtility.load("/config/default.json");
+
+        // Constants
+        width = config.get("width").asInt();
+        height = config.get("height").asInt();
+        resizable = config.get("resizable").asBoolean();
+        size = new Dimension(width, height);
+
+        // Game logic
+        jumpHeight = config.get("jumpHeight").asFloat();
+        gravity = config.get("gravity").asFloat();
+        backgroundSpeed = config.get("backgroundSpeed").asFloat();
+        obstacleSpeed = config.get("obstacleSpeed").asFloat();
+        obstacleSpeedModifier = config.get("obstacleSpeedModifier").asFloat();
+        obstacleSpawnRate = config.get("obstacleSpawnRate").asInt();
+        maxFPS = config.get("maxFPS").asInt();
+
+        // Assets
+        obstacleImages = new BufferedImage[1];
+        icon = imageStreamer.read(config.get("icon").asText());
+        backgroundImage = imageStreamer.read(config.get("backgroundImage").asText());
+        raccoonImage = imageStreamer.read(config.get("raccoonImage").asText());
+        obstacleImages[0] = imageStreamer.read(config.get("garbageCanImage").asText());
 
         // Colors
         raccoonColor = config.get("raccoonColor").asColor();
@@ -213,6 +263,7 @@ public class Config {
     public String getTitle() {
         return title;
     }
+
     public String getScorePrefix() {
         return scorePrefix;
     }
