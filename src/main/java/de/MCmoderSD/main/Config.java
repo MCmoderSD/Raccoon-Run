@@ -1,10 +1,10 @@
 package de.MCmoderSD.main;
 
-
 import de.MCmoderSD.utilities.image.ImageReader;
 import de.MCmoderSD.utilities.image.ImageStreamer;
 import de.MCmoderSD.utilities.json.JsonNode;
 import de.MCmoderSD.utilities.json.JsonUtility;
+import de.MCmoderSD.utilities.sound.AudioPlayer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,55 +12,58 @@ import java.awt.image.BufferedImage;
 @SuppressWarnings("unused")
 public class Config {
 
+    // Utilities
+    private final AudioPlayer audioPlayer;
+
     // Constants
-    private final String[] args;
-    private final int width;
-    private final int height;
-    private final boolean resizable;
-    private final Dimension size;
+    public static String[] args;
+    public static int width;
+    public static int height;
+    public static boolean resizable;
+    public static Dimension size;
 
     // Game logic constants
-    private final float jumpHeight;
-    private final float gravity;
-    private final float backgroundSpeed;
-    private final float obstacleSpeed;
-    private final float obstacleSpeedModifier;
-    private final int obstacleSpawnRate;
-    private final int maxFPS;
+    public static float jumpHeight;
+    public static float gravity;
+    public static float backgroundSpeed;
+    public static float obstacleSpeed;
+    public static float obstacleSpeedModifier;
+    public static int obstacleSpawnRate;
+    public static int maxFPS;
 
     // Assets
-    private final BufferedImage icon;
-    private final BufferedImage backgroundImage;
-    private final BufferedImage raccoonImage;
-    private final BufferedImage[] obstacleImages;
+    public static BufferedImage icon;
+    public static BufferedImage backgroundImage;
+    public static BufferedImage raccoonImage;
+    public static BufferedImage[] obstacleImages;
 
     // Colors
-    private final Color raccoonColor;
-    private final Color raccoonHitboxColor;
-    private final Color obstacleColor;
-    private final Color obstacleHitboxColor;
-    private final Color backgroundColor;
-    private final Color fontColor;
-    private final Color scoreColor;
-    private final Color fpsColor;
+    public static Color raccoonColor;
+    public static Color raccoonHitboxColor;
+    public static Color obstacleColor;
+    public static Color obstacleHitboxColor;
+    public static Color backgroundColor;
+    public static Color fontColor;
+    public static Color scoreColor;
+    public static Color fpsColor;
 
     // Language
-    private final String title;
-    private final String scorePrefix;
-    private final String fpsPrefix;
+    public static String title;
+    public static String scorePrefix;
+    public static String fpsPrefix;
 
     // Animations
-    //private final ImageIcon rainbowAnimation;
+    // public static ImageIcon rainbowAnimation;
 
     // Sounds
     /*
-    private final String dieSound;
-    private final String jumpSound;
-    private final String hitSound;
-    private final String pointSound;
-    private final String rainbowSound;
-    private final String backgroundMusic;
-    */
+     * public stastic String dieSound;
+     * public stastic String jumpSound;
+     * public stastic String hitSound;
+     * public stastic String pointSound;
+     * public stastic String rainbowSound;
+     * public stastic String backgroundMusic;
+     */
 
     // Constructor
     public Config(String[] args) {
@@ -68,6 +71,7 @@ public class Config {
 
         JsonUtility jsonUtility = new JsonUtility();
         ImageReader imageReader = new ImageReader();
+        audioPlayer = new AudioPlayer();
 
         JsonNode config = jsonUtility.load("/config/default.json");
 
@@ -115,6 +119,7 @@ public class Config {
 
         JsonUtility jsonUtility = new JsonUtility(url);
         ImageStreamer imageStreamer = new ImageStreamer(url);
+        audioPlayer = new AudioPlayer(url);
 
         JsonNode config = jsonUtility.load("/config/default.json");
 
@@ -156,119 +161,8 @@ public class Config {
         fpsPrefix = config.get("fpsPrefix").asText();
     }
 
-    // Constants
-    public String[] getArgs() {
-        return args;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public boolean isResizable() {
-        return resizable;
-    }
-
-    public Dimension getSize() {
-        return size;
-    }
-
-
-    // Game logic
-    public float getJumpHeight() {
-        return jumpHeight;
-    }
-
-    public float getGravity() {
-        return gravity;
-    }
-
-    public float getBackgroundSpeed() {
-        return backgroundSpeed;
-    }
-
-    public float getObstacleSpeed() {
-        return obstacleSpeed;
-    }
-
-    public float getObstacleSpeedModifier() {
-        return obstacleSpeedModifier;
-    }
-
-    public int getObstacleSpawnRate() {
-        return obstacleSpawnRate;
-    }
-
-    public int getMaxFPS() {
-        return maxFPS;
-    }
-
-
-    // Assets
-    public BufferedImage getIcon() {
-        return icon;
-    }
-
-    public BufferedImage getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public BufferedImage getRaccoonImage() {
-        return raccoonImage;
-    }
-
-    public BufferedImage[] getObstacleImages() {
-        return obstacleImages;
-    }
-
-    // Colors
-    public Color getRaccoonColor() {
-        return raccoonColor;
-    }
-
-    public Color getRaccoonHitboxColor() {
-        return raccoonHitboxColor;
-    }
-
-    public Color getObstacleColor() {
-        return obstacleColor;
-    }
-
-    public Color getObstacleHitboxColor() {
-        return obstacleHitboxColor;
-    }
-
-    public Color getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public Color getFontColor() {
-        return fontColor;
-    }
-
-    public Color getScoreColor() {
-        return scoreColor;
-    }
-
-    public Color getFpsColor() {
-        return fpsColor;
-    }
-
-
-    // Language
-    public String getTitle() {
-        return title;
-    }
-
-    public String getScorePrefix() {
-        return scorePrefix;
-    }
-
-    public String getFpsPrefix() {
-        return fpsPrefix;
+    // Getter
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }

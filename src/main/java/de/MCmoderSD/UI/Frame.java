@@ -10,12 +10,12 @@ public class Frame extends JFrame {
     public Frame(Config config) {
 
         // Frame
-        super(config.getTitle());
+        super(Config.title);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(config.isResizable());
+        setResizable(Config.resizable);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        setIconImage(config.getIcon());
+        setIconImage(Config.icon);
 
         // GamePanel
         new GamePanel(this, config);

@@ -8,6 +8,8 @@ import de.MCmoderSD.objects.Raccoon;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,7 +18,6 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel {
 
     // Associations
-    private final Config config;
     private final Game game;
 
     // Attributes
@@ -27,26 +28,24 @@ public class GamePanel extends JPanel {
     public GamePanel(Frame frame, Config config) {
         super();
 
-        this.config = config;
-
         // Init Panel
         setLayout(null);
-        setPreferredSize(config.getSize());
+        setPreferredSize(Config.size);
         frame.add(this);
         frame.pack();
 
         // Score Label
-        scoreLabel = new JLabel(config.getScorePrefix());
-        scoreLabel.setFont(new Font("Roboto", Font.PLAIN, config.getHeight() / 40));
-        scoreLabel.setForeground(config.getScoreColor());
+        scoreLabel = new JLabel(Config.scorePrefix);
+        scoreLabel.setFont(new Font("Roboto", Font.PLAIN, Config.height / 40));
+        scoreLabel.setForeground(Config.scoreColor);
         scoreLabel.setSize(getWidth() / 8, getHeight() / 40);
         scoreLabel.setLocation(getWidth() - scoreLabel.getWidth() - 10, 10);
         add(scoreLabel);
 
         // FPS Label
-        fpsLabel = new JLabel(config.getFpsPrefix());
-        fpsLabel.setFont(new Font("Roboto", Font.PLAIN, config.getHeight() / 40));
-        fpsLabel.setForeground(config.getFpsColor());
+        fpsLabel = new JLabel(Config.fpsPrefix);
+        fpsLabel.setFont(new Font("Roboto", Font.PLAIN, Config.height / 40));
+        fpsLabel.setForeground(Config.fpsColor);
         fpsLabel.setSize(getWidth() / 8, getHeight() / 40);
         fpsLabel.setLocation(10, 10);
         add(fpsLabel);
@@ -71,14 +70,17 @@ public class GamePanel extends JPanel {
         for (Background background : backgrounds) {
             g.setColor(background.getColor());
             g.fillRect(background.getX(), background.getY(), background.getWidth(), background.getHeight());
-            g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(), background.getHeight(), null);
+            g.drawImage(background.getImage(), background.getX(), background.getY(), background.getWidth(),
+                    background.getHeight(), null);
         }
 
         // Draw Obstacles
         for (Obstacle obstacle : obstacles) {
             g.setColor(obstacle.getColor());
-            //g.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
-            g.drawImage(obstacle.getImage(), obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight(), null);
+            // g.fillRect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(),
+            // obstacle.getHeight());
+            g.drawImage(obstacle.getImage(), obstacle.getX(), obstacle.getY(), obstacle.getWidth(),
+                    obstacle.getHeight(), null);
         }
 
         // Draw Raccoon
@@ -97,12 +99,13 @@ public class GamePanel extends JPanel {
             g.drawRect(raccoon.getX(), raccoon.getY(), raccoon.getWidth(), raccoon.getHeight());
         }
 
-        scoreLabel.setText(config.getScorePrefix() + game.getScore());
+        scoreLabel.setText(Config.scorePrefix + game.getScore());
 
         if (game.isShowFPS()) {
-            fpsLabel.setText(config.getFpsPrefix() + game.getFps());
+            fpsLabel.setText(Config.fpsPrefix + game.getFps());
             fpsLabel.setVisible(true);
-        } else fpsLabel.setVisible(false);
+        } else
+            fpsLabel.setVisible(false);
 
         paintComponents(g);
     }

@@ -1,6 +1,5 @@
 package de.MCmoderSD.objects;
 
-
 import de.MCmoderSD.main.Config;
 
 import java.awt.Color;
@@ -22,16 +21,15 @@ public class Obstacle {
     private boolean collided;
     private boolean passed;
 
-
     // Constructors
-    public Obstacle(Config config, float speed) {
+    public Obstacle(float speed) {
 
-        BufferedImage[] obstacleImages = config.getObstacleImages();
+        BufferedImage[] obstacleImages = Config.obstacleImages;
 
         image = obstacleImages[(int) Math.round(Math.random() * (obstacleImages.length - 1))];
 
-        color = config.getObstacleColor();
-        hitboxColor = config.getObstacleHitboxColor();
+        color = Config.obstacleColor;
+        hitboxColor = Config.obstacleHitboxColor;
 
         collided = false;
 

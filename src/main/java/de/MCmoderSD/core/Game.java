@@ -6,6 +6,7 @@ import de.MCmoderSD.main.Main;
 import de.MCmoderSD.objects.Background;
 import de.MCmoderSD.objects.Obstacle;
 import de.MCmoderSD.objects.Raccoon;
+import de.MCmoderSD.utilities.sound.AudioPlayer;
 
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class Game implements Runnable {
 
     // Associations
     private final GamePanel gamePanel;
-    private final Config config;
+    private final AudioPlayer audioPlayer;
 
     // Utilities
     private final Random random;
@@ -44,12 +45,11 @@ public class Game implements Runnable {
     private boolean hitbox;
     private boolean showFPS;
 
-
     // Constructor
     public Game(GamePanel gamePanel, Config config) {
 
         this.gamePanel = gamePanel;
-        this.config = config;
+        this.audioPlayer = config.getAudioPlayer();
 
         // Init Utilities
         random = new Random();
@@ -75,17 +75,20 @@ public class Game implements Runnable {
         keys = new ArrayList<>();
         backgrounds = new ArrayList<>();
         obstacles = new ArrayList<>();
-        raccoon = new Raccoon(config);
-        raccoon.setLocation(Math.toIntExact(Math.round(config.getWidth() * 0.1)), Math.toIntExact(Math.round(config.getHeight() * 0.5)) - raccoon.getHeight());
+        raccoon = new Raccoon();
+        raccoon.setLocation(Math.toIntExact(Math.round(Config.width * 0.1)),
+                Math.toIntExact(Math.round(Config.height * 0.5)) - raccoon.getHeight());
 
         // Init Backgrounds
-        backgrounds.add(new Background(config, 0, 0));
-        while (backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth() < config.getWidth())
-            backgrounds.add(new Background(config, backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth(), 0));
+        backgrounds.add(new Background(0, 0));
+        while (backgrounds.get(backgrounds.size() - 1).getX()
+                + backgrounds.get(backgrounds.size() - 1).getWidth() < Config.width)
+            backgrounds.add(new Background(
+                    backgrounds.get(backgrounds.size() - 1).getX() + backgrounds.get(backgrounds.size() - 1).getWidth(),
+                    0));
 
         new Thread(this).start();
     }
-
 
     @Override
     public void run() {
@@ -107,11 +110,10 @@ public class Game implements Runnable {
                 timer += current - now;
                 now = current;
 
-
                 // Tick
                 if (delta >= 1) {
-                    if (isLinux) Toolkit.getDefaultToolkit().sync();
-
+                    if (isLinux)
+                        Toolkit.getDefaultToolkit().sync();
 
                     /* <-- Game Loop Start --> */
 
@@ -119,11 +121,13 @@ public class Game implements Runnable {
                     double event = gameTick();
 
                     // Update Frame
-                    boolean update = renderedFrames < config.getMaxFPS();
+                    boolean update = renderedFrames < Config.maxFPS;
                     int modulo = renderedFrames % frameRate;
-                    if (modulo != 0 && update) renderedFrames++;
+                    if (modulo != 0 && update)
+                        renderedFrames++;
                     if (modulo == 0 && update) {
-                        if (isLinux) Toolkit.getDefaultToolkit().sync();
+                        if (isLinux)
+                            Toolkit.getDefaultToolkit().sync();
                         gamePanel.repaint();
                         renderedFrames++;
                     }
@@ -140,8 +144,8 @@ public class Game implements Runnable {
 
                     /* <-- Game Loop End --> */
 
-
-                    if (isLinux) Toolkit.getDefaultToolkit().sync();
+                    if (isLinux)
+                        Toolkit.getDefaultToolkit().sync();
                     delta--;
                 }
             }
@@ -169,9 +173,11 @@ public class Game implements Runnable {
 
             // Remove elements that are out of bounds
             for (Background background : backgrounds)
-                if (background.getX() + background.getWidth() < 0) backgroundsToRemove.add(background);
+                if (background.getX() + background.getWidth() < 0)
+                    backgroundsToRemove.add(background);
             for (Obstacle obstacle : obstacles)
-                if (obstacle.getX() + obstacle.getWidth() < 0) obstaclesToRemove.add(obstacle);
+                if (obstacle.getX() + obstacle.getWidth() < 0)
+                    obstaclesToRemove.add(obstacle);
 
             // Remove elements from original lists
             backgrounds.removeAll(backgroundsToRemove);
@@ -179,34 +185,42 @@ public class Game implements Runnable {
 
             // Background Spawn
             Background lastBackground = backgrounds.get(backgrounds.size() - 1);
-            if (lastBackground.getX() + lastBackground.getWidth() <= config.getWidth())
-                backgrounds.add(new Background(config, config.getWidth(), 0));
+            if (lastBackground.getX() + lastBackground.getWidth() <= Config.width)
+                backgrounds.add(new Background(Config.width, 0));
 
             // Obstacle Spawn
-            if (obstacleSpawnTimer >= config.getObstacleSpawnRate()) {
-                Obstacle obstacle = new Obstacle(config, 2);
-                obstacle.setLocation(config.getWidth(), Math.toIntExact(Math.round(config.getHeight() * 0.5)) - obstacle.getHeight());
+            if (obstacleSpawnTimer >= Config.obstacleSpawnRate) {
+                Obstacle obstacle = new Obstacle(2);
+                obstacle.setLocation(Config.width,
+                        Math.toIntExact(Math.round(Config.height * 0.5)) - obstacle.getHeight());
                 obstacles.add(obstacle);
                 obstacleSpawnTimer = 0;
-            } else obstacleSpawnTimer++;
+            } else
+                obstacleSpawnTimer++;
 
             // Collision Detection
-            for (Obstacle obstacle : obstacles) if (raccoon.getHitbox().intersects(obstacle.getHitbox())) {
-                obstacle.collision();
-                gameStarted = false;
-            }
+            for (Obstacle obstacle : obstacles)
+                if (raccoon.getHitbox().intersects(obstacle.getHitbox())) {
+                    obstacle.collision();
+                    gameStarted = false;
+                }
 
             // Score
-            for (Obstacle obstacle : obstacles) if (obstacle.getX() + obstacle.getWidth() < raccoon.getX() && !obstacle.isCollided() && !obstacle.isPassed()) {
-                obstacle.pass();
-                score++;
-            }
+            for (Obstacle obstacle : obstacles)
+                if (obstacle.getX() + obstacle.getWidth() < raccoon.getX() && !obstacle.isCollided()
+                        && !obstacle.isPassed()) {
+                    obstacle.pass();
+                    score++;
+                }
 
             // Move Objects
-            for (Background background : backgrounds) background.move();
-            for (Obstacle obstacle : obstacles) obstacle.move();
-            if (raccoon.getY() <= config.getHeight() * 0.5) raccoon.fall();
-            raccoon.move(config.getHeight() * 0.5);
+            for (Background background : backgrounds)
+                background.move();
+            for (Obstacle obstacle : obstacles)
+                obstacle.move();
+            if (raccoon.getY() <= Config.height * 0.5)
+                raccoon.fall();
+            raccoon.move(Config.height * 0.5);
         }
 
         return event;
@@ -214,8 +228,10 @@ public class Game implements Runnable {
 
     // Triggers
     public void jump() {
-        if (!gameStarted) gameStarted = true;
-        if (raccoon.getY() >= config.getHeight() * 0.5 - raccoon.getHeight()) raccoon.jump();
+        if (!gameStarted)
+            gameStarted = true;
+        if (raccoon.getY() >= Config.height * 0.5 - raccoon.getHeight())
+            raccoon.jump();
     }
 
     public void togglePause() {

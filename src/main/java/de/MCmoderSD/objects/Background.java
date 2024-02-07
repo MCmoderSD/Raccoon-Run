@@ -20,11 +20,11 @@ public class Background {
     private float x;
 
     // Constructors
-    public Background(Config config, int x, int y) {
-        image = config.getBackgroundImage();
-        color = config.getBackgroundColor();
+    public Background(int x, int y) {
+        image = Config.backgroundImage;
+        color = Config.backgroundColor;
 
-        speed = config.getBackgroundSpeed();
+        speed = Config.backgroundSpeed;
 
         width = image.getWidth();
         height = image.getHeight();
